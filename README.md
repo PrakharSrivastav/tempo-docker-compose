@@ -21,17 +21,17 @@ graph LR
     tempo -.-> |read/write path| Tempo2
     tempo -.-> |read/write path| Tempo3
     
-    subgraph LokiRead["loki -target=read (3)"]
+    subgraph LokiRead["tempo-instance"]
         Tempo1 -.-> Ingester["ingester"]
         Tempo1 -.-> Querier["query"]
     end
     
-    subgraph LokiRead["loki -target=read (3)"]
+    subgraph LokiRead["tempo-instance"]
         Tempo2 -.-> Ingester["ingester"]
         Tempo2 -.-> Querier["query"]
     end
     
-    subgraph LokiRead["loki -target=read (3)"]
+    subgraph LokiRead["tempo-instance"]
         Tempo3 -.-> Ingester["ingester"]
         Tempo3-.-> Querier["query"]
     end
