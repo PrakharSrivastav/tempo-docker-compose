@@ -1,0 +1,70 @@
+memberlist:
+  abort_if_cluster_join_fails: false
+  bind_port: 7946
+  join_members:
+  - tempo1:7946
+  - tempo2:7946
+  - tempo3:7946
+
+multitenancy_enabled: false
+usage_report:
+  reporting_enabled: false
+compactor:
+  compaction:
+    block_retention: 168h
+distributor:
+  receivers:
+        #jaeger:
+        #  protocols:
+        #    grpc:
+        #      endpoint: 0.0.0.0:14250
+        #    thrift_binary:
+        #      endpoint: 0.0.0.0:6832
+        #    thrift_compact:
+        #      endpoint: 0.0.0.0:6831
+        #    thrift_http:
+        #      endpoint: 0.0.0.0:14268
+        #opencensus: null
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+ingester:
+      max_block_bytes: 1000000
+      max_block_duration: 1m
+      trace_idle_period: 10s
+server:
+      http_listen_port: 3100
+storage:
+      trace:
+        backend: s3
+        local:
+          path: /var/tempo/traces
+        pool:
+          max_workers: 100
+          queue_depth: 10000
+        s3:
+          access_key: ---
+          bucket: ---
+          endpoint: ---
+          insecure: false
+          secret_key: ---
+        wal:
+          path: /var/tempo/wal
+# querier:
+#       {}
+# query_frontend:
+#       {}
+# overrides:
+#       per_tenant_override_config: /conf/overrides.yaml
+
+querier:
+  frontend_worker:
+    frontend_address: tempo:9095
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: ['service-graphs', 'span-metrics']
