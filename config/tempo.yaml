@@ -1,3 +1,6 @@
+multitenancy_enabled: true
+usage_report:
+  reporting_enabled: false
 memberlist:
   abort_if_cluster_join_fails: false
   bind_port: 7946
@@ -6,9 +9,6 @@ memberlist:
   - tempo2:7946
   - tempo3:7946
 
-multitenancy_enabled: false
-usage_report:
-  reporting_enabled: false
 compactor:
   compaction:
     block_retention: 168h
@@ -32,9 +32,11 @@ distributor:
             http:
               endpoint: 0.0.0.0:4318
 ingester:
-      max_block_bytes: 1000000
-      max_block_duration: 1m
+      # 52428800 = 50MB
+      max_block_bytes: 52428800
+      max_block_duration: 15m
       trace_idle_period: 10s
+      flush_all_on_shutdown: true
 server:
       http_listen_port: 3100
 storage:
